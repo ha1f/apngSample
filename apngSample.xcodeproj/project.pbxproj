@@ -13,6 +13,10 @@
 		56ADCEE91F7349780068E370 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56ADCEE81F7349780068E370 /* Assets.xcassets */; };
 		56ADCEEC1F7349780068E370 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56ADCEEA1F7349780068E370 /* LaunchScreen.storyboard */; };
 		56ADCEF71F7349780068E370 /* apngSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCEF61F7349780068E370 /* apngSampleTests.swift */; };
+		56ADCF031F734CCA0068E370 /* animated.png in Resources */ = {isa = PBXBuildFile; fileRef = 56ADCF021F7349FD0068E370 /* animated.png */; };
+		56ADCF061F7364640068E370 /* APNG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF051F7364640068E370 /* APNG.swift */; };
+		56ADCF081F7365CD0068E370 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF071F7365CD0068E370 /* DataView.swift */; };
+		56ADCF0A1F73675D0068E370 /* Crc32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF091F73675D0068E370 /* Crc32.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		56ADCEF21F7349780068E370 /* apngSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = apngSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56ADCEF61F7349780068E370 /* apngSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apngSampleTests.swift; sourceTree = "<group>"; };
 		56ADCEF81F7349780068E370 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56ADCF021F7349FD0068E370 /* animated.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = animated.png; sourceTree = "<group>"; };
+		56ADCF051F7364640068E370 /* APNG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APNG.swift; sourceTree = "<group>"; };
+		56ADCF071F7365CD0068E370 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		56ADCF091F73675D0068E370 /* Crc32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crc32.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +85,8 @@
 		56ADCEE01F7349780068E370 /* apngSample */ = {
 			isa = PBXGroup;
 			children = (
+				56ADCF041F7364550068E370 /* APNG */,
+				56ADCF011F7349840068E370 /* Resource */,
 				56ADCEE11F7349780068E370 /* AppDelegate.swift */,
 				56ADCEE31F7349780068E370 /* ViewController.swift */,
 				56ADCEE51F7349780068E370 /* Main.storyboard */,
@@ -94,6 +104,24 @@
 				56ADCEF81F7349780068E370 /* Info.plist */,
 			);
 			path = apngSampleTests;
+			sourceTree = "<group>";
+		};
+		56ADCF011F7349840068E370 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				56ADCF021F7349FD0068E370 /* animated.png */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		56ADCF041F7364550068E370 /* APNG */ = {
+			isa = PBXGroup;
+			children = (
+				56ADCF051F7364640068E370 /* APNG.swift */,
+				56ADCF071F7365CD0068E370 /* DataView.swift */,
+				56ADCF091F73675D0068E370 /* Crc32.swift */,
+			);
+			path = APNG;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,6 +207,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56ADCF031F734CCA0068E370 /* animated.png in Resources */,
 				56ADCEEC1F7349780068E370 /* LaunchScreen.storyboard in Resources */,
 				56ADCEE91F7349780068E370 /* Assets.xcassets in Resources */,
 				56ADCEE71F7349780068E370 /* Main.storyboard in Resources */,
@@ -200,7 +229,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56ADCEE41F7349780068E370 /* ViewController.swift in Sources */,
+				56ADCF061F7364640068E370 /* APNG.swift in Sources */,
+				56ADCF081F7365CD0068E370 /* DataView.swift in Sources */,
 				56ADCEE21F7349780068E370 /* AppDelegate.swift in Sources */,
+				56ADCF0A1F73675D0068E370 /* Crc32.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
