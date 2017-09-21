@@ -28,8 +28,14 @@ struct ApngImage {
     }
     
     var ihdr: PngIHDRChunkData? {
-        return chunk(with: PngChunkType.ihdr.rawValue).map { chunk -> PngIHDRChunkData in
+        return chunk(with: .ihdr).map { chunk in
             return PngIHDRChunkData(chunk.data)
+        }
+    }
+    
+    var actl: PngActlChunkData? {
+        return chunk(with: .actl).map { chunk in
+            return PngActlChunkData(chunk.data)
         }
     }
     
@@ -56,18 +62,33 @@ struct ApngImage {
         return ApngImage(chunks: chunks)
     }
     
-    private func chunk(with chunkTypeString: String) -> PngChunk? {
-        return chunks.filter { $0.type == chunkTypeString }.first
+    private func chunk(with chunkType: PngChunkType) -> PngChunk? {
+        return chunks.filter { $0.type == chunkType.rawValue }.first
     }
     
     func asData() -> Data {
         let bytes = ApngImage.signature + chunks.flatMap { $0.asData().map { $0 } }
         return Data(bytes)
     }
-    
+}
+
+// debug
+extension ApngImage {
     func debugPrint() {
         self.chunks.forEach { chunk in
-            print(chunk.type, chunk.length)
+            print(chunk.type, terminator: ": ")
+            switch chunk.type {
+            case PngChunkType.ihdr.rawValue:
+                print(PngIHDRChunkData(chunk.data))
+            case PngChunkType.actl.rawValue:
+                print(PngActlChunkData(chunk.data))
+            case PngChunkType.fcTL.rawValue:
+                print(PngFctlChunkData(chunk.data))
+            case PngChunkType.fdAT.rawValue:
+                print(PngFdatChunkData(chunk.data))
+            default:
+                print(chunk.length)
+            }
         }
     }
 }

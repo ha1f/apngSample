@@ -8,22 +8,9 @@
 
 import Foundation
 
-extension UInt32 {
-    var bytes: [UInt8] {
-        return (0..<4).map { i -> UInt8 in
-            let shiftNum = 8*(3-i)
-            return UInt8((self >> shiftNum) & 0xff)
-        }
-    }
-}
-
 class DataView {
     private let data: Data
     private var currentIndex: Data.Index
-    
-    var uint8Array: [UInt8] {
-        return data.map { $0 }
-    }
     
     init(_ data: Data) {
         self.data = data
@@ -52,6 +39,14 @@ class DataView {
         return try! read(1).first ?? 0
     }
     
+    func readUint16() -> UInt16 {
+        let value = try! read(2)
+            .reduce(0) { (current, value) -> UInt16 in
+                current << 8 + UInt16(value)
+        }
+        return value
+    }
+    
     func readUint32() -> UInt32 {
         let value = try! read(4)
             .reduce(0) { (current, value) -> UInt32 in
@@ -60,10 +55,8 @@ class DataView {
         return value
     }
     
-    func readString(lenth: Int) -> String {
-        let characters = try! read(lenth)
-            .map { Character(UnicodeScalar($0)) }
-        return String(characters)
+    func readString(lenth: Int, encoding: String.Encoding = .ascii) -> String {
+        return String(data: try! read(lenth), encoding: encoding)!
     }
     
     func readData(length: Int) -> Data {

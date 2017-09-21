@@ -14,91 +14,28 @@ struct PngChunk {
     let data: Data
     let crc: UInt32
     
+    static func create(type: PngChunkType, data: Data) -> PngChunk {
+        return PngChunk(length: UInt32(data.count),
+                        type: type.rawValue,
+                        data: data,
+                        crc: calcCrc(type.rawValue, data))
+    }
+    
     func verifyCrc() -> Bool {
         return crc == calcCrc()
     }
     
     func asData() -> Data {
-        let bytes = length.bytes + type.utf8.map { $0 } + data.map { $0 } + crc.bytes
+        let bytes = length.bytes + type.utf8.bytes + data.bytes + crc.bytes
         return Data(bytes: bytes)
     }
     
+    private static func calcCrc(_ type: String, _ data: Data) -> UInt32 {
+        return Data(type.utf8.bytes + data.bytes).calcCrc32()
+    }
+    
     private func calcCrc() -> UInt32 {
-        return Data(type.utf8.map { $0 } + data.map { $0 }).calcCrc32()
-    }
-}
-
-struct PngIHDRChunkData {
-    let width: UInt32
-    let height: UInt32
-    let bitDepth: UInt8
-    let colorType: UInt8
-    let compression: UInt8
-    let filter: UInt8
-    let interlace: UInt8
-    
-    init(_ data: Data) {
-        let dataView = DataView(data)
-        width = dataView.readUint32()
-        height = dataView.readUint32()
-        bitDepth = dataView.readUint8()
-        colorType = dataView.readUint8()
-        compression = dataView.readUint8()
-        filter = dataView.readUint8()
-        interlace = dataView.readUint8()
-    }
-}
-
-// animation control(acTL)
-struct PngActlChunkData {
-    /// same as the number of fcTL chunks, != 0
-    let numFrames: UInt32
-    
-    /// ループ回数、0なら無限
-    let numPlays: UInt32
-}
-
-/// frame control(fcTL)
-struct PngFctlChunkData {
-    let sequenceNumber: UInt32
-    let width: UInt32
-    let height: UInt32
-    let xOffset: UInt32
-    let yOffset: UInt32
-    /// 0なら最速
-    let delayNum: UInt16
-    /// 0なら100として扱う
-    let delayDen: UInt16
-    /// フレームを描画した後にフレーム領域を廃棄するか?
-    let disposeOp: UInt8
-    let blendOp: UInt8
-    
-    enum DisposeOption: UInt8 {
-        /// 次のフレームを描画する前に消去しません。出力バッファをそのまま使用します。
-        case none = 0
-        /// 次のフレームを描画する前に、出力バッファのフレーム領域を完全に透過な黒で塗りつぶします。
-        case background = 1
-        /// 次のフレームを描画する前に、出力バッファのフレーム領域をこのフレームに入る前の状態に戻します。
-        case previous = 2
-    }
-    
-    enum BlendOption: UInt8 {
-        /// アルファ値を含めた全ての要素をフレームの出力バッファ領域に上書きします。
-        case source = 0
-        /// 書き込むデータのアルファ値を使って出力バッファに合成します。このとき、PNG 仕様 への拡張 Version 1.2.0 のアルファチャンネル処理 に書いてある通り上書き処理をします。サンプルコードの 2 つ目の項目を参照してください。
-        case over = 1
-    }
-}
-
-/// frame Data
-struct PngFdatChunkData {
-    let sequenceNumber: UInt32
-    let frameData: Data
-    
-    init(_ data: Data) {
-        let dataView = DataView(data)
-        self.sequenceNumber = dataView.readUint32()
-        self.frameData = dataView.readToLast()
+        return PngChunk.calcCrc(type, data)
     }
 }
 
