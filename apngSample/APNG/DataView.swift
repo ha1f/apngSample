@@ -8,6 +8,15 @@
 
 import Foundation
 
+extension UInt32 {
+    var bytes: [UInt8] {
+        return (0..<4).map { i -> UInt8 in
+            let shiftNum = 8*(3-i)
+            return UInt8((self >> shiftNum) & 0xff)
+        }
+    }
+}
+
 class DataView {
     private let data: Data
     private var currentIndex: Data.Index
@@ -19,14 +28,6 @@ class DataView {
     init(_ data: Data) {
         self.data = data
         self.currentIndex = data.startIndex
-    }
-    
-    convenience init(_ data: UInt32) {
-        let bytes = (0..<4).map { i -> UInt8 in
-            let shiftNum = 8*(3-i)
-            return UInt8((data >> shiftNum) & 0xff)
-        }
-        self.init(Data(bytes))
     }
     
     func rewind() {

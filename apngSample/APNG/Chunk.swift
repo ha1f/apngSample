@@ -19,83 +19,13 @@ struct PngChunk {
     }
     
     func asData() -> Data {
-        let bytes = DataView(length).uint8Array + type.utf8.map { $0 } + data.map { $0 } + DataView(crc).uint8Array
+        let bytes = length.bytes + type.utf8.map { $0 } + data.map { $0 } + crc.bytes
         return Data(bytes: bytes)
     }
     
     private func calcCrc() -> UInt32 {
         return Data(type.utf8.map { $0 } + data.map { $0 }).calcCrc32()
     }
-}
-
-enum PngChunkType: String {
-    // png
-    case ihdr = "IHDR"
-    case plte = "PLTE"
-    case idat = "IDAT"
-    case iend = "IEND"
-    
-    // Transparency
-    
-    case tRNS = "tRNS"
-    
-    // Colour space
-    case cHRM = "cHRM"
-    case gAMA = "gAMA"
-    case iCCP = "iCCP"
-    case sBIT = "sBIT"
-    case sRGB = "sRGB"
-    
-    // textual
-    
-    case iTXt = "iTXt"
-    case tEXt = "tEXt"
-    case zTXt = "zTXt"
-    
-    // Miscellaneous
-    case bKGD = "bKGD"
-    case hIST = "hIST"
-    case pHYs = "pHYs"
-    case sPLT = "sPLT"
-    
-    // time
-    case tIME = "tIME"
-    
-    // apng specific
-    case actl = "acTL"
-    case fcTL = "fcTL"
-    case fdAT = "fdAT"
-    
-    var isDefaultType: Bool {
-        return PngChunkType.defaultTypes.contains { $0.rawValue == self.rawValue }
-    }
-    
-    static let defaultTypes: [PngChunkType] = [
-        ihdr,
-        plte,
-        idat,
-        iend,
-        tRNS,
-        cHRM,
-        gAMA,
-        iCCP,
-        sBIT,
-        sRGB,
-        iTXt,
-        tEXt,
-        zTXt,
-        bKGD,
-        hIST,
-        pHYs,
-        sPLT,
-        tIME
-    ]
-}
-
-enum PngColorType: Int {
-    case png8 = 3
-    case png24 = 2
-    case png32 = 6
 }
 
 struct PngIHDRChunkData {
