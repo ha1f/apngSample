@@ -8,8 +8,24 @@
 
 import Foundation
 
+protocol ByteArrayConvertiblesConvertible: ByteArrayConvertible {
+    var convertibles: [ByteArrayConvertible] { get }
+}
+
+extension ByteArrayConvertiblesConvertible {
+    var bytes: [UInt8] {
+        return convertibles.flatMap { $0.bytes }
+    }
+}
+
 protocol ByteArrayConvertible {
     var bytes: [UInt8] { get }
+}
+
+extension ByteArrayConvertible {
+    func asData() -> Data {
+        return Data(bytes)
+    }
 }
 
 extension String.UTF8View {
@@ -39,5 +55,11 @@ extension UInt16: ByteArrayConvertible {
             let shiftNum = 8*(1-i)
             return UInt8((self >> shiftNum) & 0xff)
         }
+    }
+}
+
+extension UInt8: ByteArrayConvertible {
+    var bytes: [UInt8] {
+        return [self]
     }
 }

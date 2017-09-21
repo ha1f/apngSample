@@ -29,3 +29,9 @@ struct PngIHDRChunkData {
         interlace = dataView.readUint8()
     }
 }
+
+extension PngIHDRChunkData: ByteArrayConvertiblesConvertible {
+    var convertibles: [ByteArrayConvertible] {
+        return [width, height, bitDepth, colorType, compression, filter, interlace]
+    }
+}

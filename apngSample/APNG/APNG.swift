@@ -86,6 +86,8 @@ extension ApngImage {
                 print(PngFctlChunkData(chunk.data))
             case PngChunkType.fdAT.rawValue:
                 print(PngFdatChunkData(chunk.data))
+            case PngChunkType.tEXt.rawValue:
+                print(PngTextChunkData(chunk.data))
             default:
                 print(chunk.length)
             }

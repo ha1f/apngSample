@@ -22,3 +22,9 @@ struct PngActlChunkData {
         numPlays = dataView.readUint32()
     }
 }
+
+extension PngActlChunkData: ByteArrayConvertiblesConvertible {
+    var convertibles: [ByteArrayConvertible] {
+        return [numFrames, numPlays]
+    }
+}

@@ -19,3 +19,9 @@ struct PngFdatChunkData {
         self.frameData = dataView.readToLast()
     }
 }
+
+extension PngFdatChunkData: ByteArrayConvertiblesConvertible {
+    var convertibles: [ByteArrayConvertible] {
+        return [sequenceNumber, frameData]
+    }
+}
