@@ -26,8 +26,14 @@ class ViewController: UIViewController {
         }
         do {
             let data = try Data(contentsOf: url)
-            let pngImage = PngImage.read(from: data)
-            print(pngImage.chunks)
+            let pngImage = ApngImage.read(from: data)
+            pngImage.debugPrint()
+            
+            let image = UIImage(data: pngImage.defaultPngImage.asData())
+            let imageView = UIImageView()
+            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            imageView.image = image
+            self.view.addSubview(imageView)
         } catch(let error) {
             print(error)
         }
