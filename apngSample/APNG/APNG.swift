@@ -25,15 +25,30 @@ struct ApngImage {
     
     private static let signature: [UInt8] = [137, 80, 78, 71, 13, 10, 26, 10]
     
-    static func build(ihdr: PngIHDRChunkData, plte: PngPlteChunkData, idat: PngIdatChunkData) -> ApngImage {
-        return ApngImage(chunks: [ihdr.asPngChunk(with: .ihdr),
-                                  plte.asPngChunk(with: .plte),
-                                  idat.asPngChunk(with: .idat),
-                                  PngChunk.iend])
+    func buildFramePng(frame: ApngFrame) -> ApngImage {
+        let ihdr = self.ihdr!.withSettingFrame(width: frame.fctl.width, height: frame.fctl.height)
+        let chunks = [ihdr.asPngChunk(with: .ihdr), self.plte?.asPngChunk(with: .plte), self.chunk(with: .tRNS), frame.idat.asPngChunk(with: .idat)].flatMap { $0 } +
+            self.chunks.filter { chunk in
+                PngChunkType.defaultTypes.contains(where: { chunk.type == $0.rawValue })
+                    && chunk.type != PngChunkType.ihdr.rawValue
+                    && chunk.type != PngChunkType.idat.rawValue
+                    && chunk.type != PngChunkType.plte.rawValue
+                    && chunk.type != PngChunkType.tRNS.rawValue
+             }
+        return ApngImage(chunks: chunks)
     }
     
-    func buildFramePng(frame: ApngFrame) -> ApngImage {
-        return ApngImage.build(ihdr: self.ihdr!.withSettingFrame(width: frame.fctl.width, height: frame.fctl.height), plte: self.plte!, idat: frame.idat)
+    var isApng: Bool {
+        for chunk in chunks {
+            if chunk.type == PngChunkType.actl.rawValue {
+                return true
+            }
+            if chunk.type == PngChunkType.idat.rawValue {
+                // actl must be before idat
+                return false
+            }
+        }
+        return false
     }
     
     var frames: [ApngFrame] {
@@ -86,7 +101,18 @@ struct ApngImage {
             let data = dataView.readData(length: Int(length))
             let crc = dataView.readUint32()
             let chunk = PngChunk(length: length, type: type, data: data, crc: crc)
-            chunks.append(chunk)
+            
+            // 必要に応じて連結
+            if chunk.type == PngChunkType.idat.rawValue && chunks.last?.type == PngChunkType.idat.rawValue {
+                let oldChunk = chunks.removeLast()
+                chunks.append(oldChunk.concated(chunk)!)
+            } else if chunk.type == PngChunkType.fdAT.rawValue && chunks.last?.type == PngChunkType.fdAT.rawValue {
+                let oldChunk = chunks.removeLast()
+                chunks.append(oldChunk.concated(chunk)!)
+            } else {
+                chunks.append(chunk)
+            }
+            
             if type == PngChunkType.iend.rawValue {
                 break
             }

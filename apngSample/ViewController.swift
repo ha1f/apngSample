@@ -27,13 +27,11 @@ class ViewController: UIViewController {
         do {
             let data = try Data(contentsOf: url)
             let pngImage = ApngImage.read(from: data)
-            pngImage.debugPrint()
             
-            print(pngImage.frames)
+            print(pngImage.defaultPngImage.debugPrint())
             
-            print("********sample frame*******")
             let sampleFrame = pngImage.buildFramePng(frame: pngImage.frames[5])
-//            let sampleFrame = pngImage.defaultPngImage
+            print("********sample frame*******")
             sampleFrame.debugPrint()
             
             let image = UIImage(data: sampleFrame.asData())

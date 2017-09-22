@@ -23,6 +23,14 @@ struct PngChunk {
                         crc: calcCrc(type.rawValue, data))
     }
     
+    func concated(_ other: PngChunk) -> PngChunk? {
+        guard type == other.type else {
+            return nil
+        }
+        let concatData = data + other.data
+        return PngChunk(length: length + other.length, type: type, data: concatData, crc: PngChunk.calcCrc(type, concatData))
+    }
+    
     func verifyCrc() -> Bool {
         return crc == calcCrc()
     }
