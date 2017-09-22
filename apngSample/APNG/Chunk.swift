@@ -14,6 +14,8 @@ struct PngChunk {
     let data: Data
     let crc: UInt32
     
+    static let iend = PngChunk.create(type: .iend, data: Data())
+    
     static func create(type: PngChunkType, data: Data) -> PngChunk {
         return PngChunk(length: UInt32(data.count),
                         type: type.rawValue,

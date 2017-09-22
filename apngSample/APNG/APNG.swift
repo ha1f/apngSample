@@ -14,11 +14,42 @@ import Foundation
 
 //
 
+struct ApngFrame {
+    let fctl: PngFctlChunkData
+    let idat: PngIdatChunkData
+}
+
 /// 全てのフレームは必ずIHDRの範囲内
 struct ApngImage {
     let chunks: [PngChunk]
     
     private static let signature: [UInt8] = [137, 80, 78, 71, 13, 10, 26, 10]
+    
+    static func build(ihdr: PngIHDRChunkData, plte: PngPlteChunkData, idat: PngIdatChunkData) -> ApngImage {
+        return ApngImage(chunks: [ihdr.asPngChunk(with: .ihdr),
+                                  plte.asPngChunk(with: .plte),
+                                  idat.asPngChunk(with: .idat),
+                                  PngChunk.iend])
+    }
+    
+    func buildFramePng(frame: ApngFrame) -> ApngImage {
+        return ApngImage.build(ihdr: self.ihdr!.withSettingFrame(width: frame.fctl.width, height: frame.fctl.height), plte: self.plte!, idat: frame.idat)
+    }
+    
+    var frames: [ApngFrame] {
+        var frames = [ApngFrame]()
+        for (index, chunk) in chunks.enumerated() {
+            if chunk.type == PngChunkType.fcTL.rawValue {
+                let nextChunk = chunks[index + 1]
+                if nextChunk.type == PngChunkType.idat.rawValue {
+                    frames.append(ApngFrame(fctl: PngFctlChunkData(chunk.data), idat: PngIdatChunkData(nextChunk.data)))
+                } else if nextChunk.type == PngChunkType.fdAT.rawValue {
+                    frames.append(ApngFrame(fctl: PngFctlChunkData(chunk.data), idat: PngIdatChunkData(PngFdatChunkData(nextChunk.data).frameData)))
+                }
+            }
+        }
+        return frames
+    }
     
     var defaultPngImage: ApngImage {
         let chunks = self.chunks.filter { chunk in
@@ -36,6 +67,12 @@ struct ApngImage {
     var actl: PngActlChunkData? {
         return chunk(with: .actl).map { chunk in
             return PngActlChunkData(chunk.data)
+        }
+    }
+    
+    var plte: PngPlteChunkData? {
+        return chunk(with: .plte).map { chunk in
+            return PngPlteChunkData(chunk.data)
         }
     }
     
@@ -88,6 +125,10 @@ extension ApngImage {
                 print(PngFdatChunkData(chunk.data))
             case PngChunkType.tEXt.rawValue:
                 print(PngTextChunkData(chunk.data))
+            case PngChunkType.idat.rawValue:
+                print(PngIdatChunkData(chunk.data))
+            case PngChunkType.plte.rawValue:
+                print(PngPlteChunkData(chunk.data))
             default:
                 print(chunk.length)
             }

@@ -18,6 +18,22 @@ struct PngIHDRChunkData {
     let filter: UInt8
     let interlace: UInt8
     
+    init(width: UInt32,
+         height: UInt32,
+         bitDepth: UInt8,
+         colorType: UInt8,
+         compression: UInt8,
+         filter: UInt8,
+         interlace: UInt8) {
+        self.width = width
+        self.height = height
+        self.bitDepth = bitDepth
+        self.colorType = colorType
+        self.compression = compression
+        self.filter = filter
+        self.interlace = interlace
+    }
+    
     init(_ data: Data) {
         let dataView = DataView(data)
         width = dataView.readUint32()
@@ -27,6 +43,16 @@ struct PngIHDRChunkData {
         compression = dataView.readUint8()
         filter = dataView.readUint8()
         interlace = dataView.readUint8()
+    }
+    
+    func withSettingFrame(width: UInt32, height: UInt32) -> PngIHDRChunkData {
+        return PngIHDRChunkData(width: width,
+                                height: height,
+                                bitDepth: self.bitDepth,
+                                colorType: self.colorType,
+                                compression: self.compression,
+                                filter: self.filter,
+                                interlace: self.interlace)
     }
 }
 

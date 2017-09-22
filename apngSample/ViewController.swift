@@ -29,7 +29,14 @@ class ViewController: UIViewController {
             let pngImage = ApngImage.read(from: data)
             pngImage.debugPrint()
             
-            let image = UIImage(data: pngImage.defaultPngImage.asData())
+            print(pngImage.frames)
+            
+            print("********sample frame*******")
+            let sampleFrame = pngImage.buildFramePng(frame: pngImage.frames[5])
+//            let sampleFrame = pngImage.defaultPngImage
+            sampleFrame.debugPrint()
+            
+            let image = UIImage(data: sampleFrame.asData())
             let imageView = UIImageView()
             imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
             imageView.image = image

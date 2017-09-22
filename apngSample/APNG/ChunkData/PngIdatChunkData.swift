@@ -10,4 +10,14 @@ import Foundation
 
 struct PngIdatChunkData {
     let data: Data
+    
+    init(_ data: Data) {
+        self.data = data
+    }
+}
+
+extension PngIdatChunkData: ByteArrayConvertible {
+    var bytes: [UInt8] {
+        return data.bytes
+    }
 }

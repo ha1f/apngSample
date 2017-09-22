@@ -41,6 +41,15 @@ enum PngChunkType: String {
     // time
     case tIME = "tIME"
     
+    //
+    case fRAc = "fRAc"
+    case gIFg = "gIFg"
+    case gIFt = "gIFt"
+    case gIFx = "gIFx"
+    case oFFs = "oFFs"
+    case pCAL = "pCAL"
+    case sCAL = "sCAL"
+    
     // apng specific
     case actl = "acTL"
     case fcTL = "fcTL"

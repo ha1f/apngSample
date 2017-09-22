@@ -12,6 +12,11 @@ struct PngTextChunkData {
     let keyword: String
     let text: String
     
+    init(keyword: String, text: String) {
+        self.keyword = keyword
+        self.text = text
+    }
+    
     init(_ data: Data) {
         let splitted = data.split(separator: 0, maxSplits: 1, omittingEmptySubsequences: false)
         keyword = String(data: splitted.first!, encoding: String.Encoding.isoLatin1)!
