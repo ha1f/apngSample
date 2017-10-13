@@ -23,7 +23,7 @@ struct PngChunk {
                         crc: calcCrc(type.rawValue, data))
     }
     
-    func concated(_ other: PngChunk) -> PngChunk? {
+    func concated(with other: PngChunk) -> PngChunk? {
         guard type == other.type else {
             return nil
         }

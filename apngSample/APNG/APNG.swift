@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 // https://www.w3.org/TR/PNG/
 // https://developer.mozilla.org/ja/docs/Animated_PNG_graphics
@@ -27,8 +27,13 @@ struct ApngImage {
     
     func buildFramePng(frame: ApngFrame) -> ApngImage {
         let ihdr = self.ihdr!.withSettingFrame(width: frame.fctl.width, height: frame.fctl.height)
-        let chunks = [ihdr.asPngChunk(with: .ihdr), self.plte?.asPngChunk(with: .plte), self.chunk(with: .tRNS), frame.idat.asPngChunk(with: .idat)].flatMap { $0 } +
-            self.chunks.filter { chunk in
+        let chunks = [
+            ihdr.asPngChunk(with: .ihdr),
+            self.plte?.asPngChunk(with: .plte),
+            self.chunk(with: .tRNS),
+            frame.idat.asPngChunk(with: .idat)
+            ].flatMap { $0 }
+            + self.chunks.filter { chunk in
                 PngChunkType.defaultTypes.contains(where: { chunk.type == $0.rawValue })
                     && chunk.type != PngChunkType.ihdr.rawValue
                     && chunk.type != PngChunkType.idat.rawValue
@@ -36,6 +41,27 @@ struct ApngImage {
                     && chunk.type != PngChunkType.tRNS.rawValue
              }
         return ApngImage(chunks: chunks)
+    }
+    
+    func buildUIImage(from frame: ApngFrame) -> UIImage? {
+        let apngImage = buildFramePng(frame: frame)
+        let size = CGSize(width: CGFloat(self.ihdr!.width), height: CGFloat(self.ihdr!.height))
+        UIGraphicsBeginImageContext(size)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        guard let cgImage = apngImage.asUIImage()?.cgImage else {
+            return nil
+        }
+        let frameImageOffset = CGPoint(x: CGFloat(frame.fctl.xOffset), y: CGFloat(frame.fctl.yOffset))
+        let frameImageSize = CGSize(width: CGFloat(frame.fctl.width), height: CGFloat(frame.fctl.height))
+        let frameImageRect = CGRect(origin: frameImageOffset, size: frameImageSize)
+        print(frameImageRect)
+        context.draw(cgImage, in: frameImageRect)
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
     
     var isApng: Bool {
@@ -105,10 +131,10 @@ struct ApngImage {
             // 必要に応じて連結
             if chunk.type == PngChunkType.idat.rawValue && chunks.last?.type == PngChunkType.idat.rawValue {
                 let oldChunk = chunks.removeLast()
-                chunks.append(oldChunk.concated(chunk)!)
+                chunks.append(oldChunk.concated(with: chunk)!)
             } else if chunk.type == PngChunkType.fdAT.rawValue && chunks.last?.type == PngChunkType.fdAT.rawValue {
                 let oldChunk = chunks.removeLast()
-                chunks.append(oldChunk.concated(chunk)!)
+                chunks.append(oldChunk.concated(with: chunk)!)
             } else {
                 chunks.append(chunk)
             }
@@ -133,6 +159,11 @@ struct ApngImage {
         let bytes = ApngImage.signature + chunks.flatMap { $0.asData().map { $0 } }
         return Data(bytes)
     }
+    
+    func asUIImage() -> UIImage? {
+        return UIImage(data: asData())
+    }
+    
 }
 
 // debug

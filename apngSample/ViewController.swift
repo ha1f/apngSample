@@ -9,10 +9,18 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    let imageView: UIImageView = {
+        let imageView = UIImageView()
+//        imageView.contentMode = .center
+        return imageView
+    }()
+    var updateTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        view.addSubview(self.imageView)
         
         read()
     }
@@ -27,18 +35,18 @@ class ViewController: UIViewController {
         do {
             let data = try Data(contentsOf: url)
             let pngImage = ApngImage.read(from: data)
+            imageView.frame = CGRect(origin: .zero, size: CGSize(width: CGFloat(pngImage.ihdr!.width), height: CGFloat(pngImage.ihdr!.height)))
             
-            print(pngImage.defaultPngImage.debugPrint())
-            
-            let sampleFrame = pngImage.buildFramePng(frame: pngImage.frames[5])
-            print("********sample frame*******")
-            sampleFrame.debugPrint()
-            
-            let image = UIImage(data: sampleFrame.asData())
-            let imageView = UIImageView()
-            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-            imageView.image = image
-            self.view.addSubview(imageView)
+            let maxCount = pngImage.frames.count
+            var currentFrameIndex = 0
+            self.updateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+                if currentFrameIndex >= maxCount {
+                    currentFrameIndex = 0
+                }
+                let image = pngImage.buildUIImage(from: pngImage.frames[currentFrameIndex])
+                self.imageView.image = image
+                currentFrameIndex += 1
+            }
         } catch(let error) {
             print(error)
         }
