@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		565931961FD53FA900E80835 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565931951FD53FA900E80835 /* UIImageExtension.swift */; };
+		565931981FD542D100E80835 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565931971FD542D100E80835 /* CGRectExtension.swift */; };
+		5659319A1FD543C700E80835 /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565931991FD543C700E80835 /* CGSizeExtension.swift */; };
 		56846C421F73D11700FAD362 /* PngIdatChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56846C411F73D11700FAD362 /* PngIdatChunkData.swift */; };
 		56846C441F74965A00FAD362 /* PngPlteChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56846C431F74965A00FAD362 /* PngPlteChunkData.swift */; };
 		56ADCEE21F7349780068E370 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCEE11F7349780068E370 /* AppDelegate.swift */; };
@@ -40,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		565931951FD53FA900E80835 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		565931971FD542D100E80835 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
+		565931991FD543C700E80835 /* CGSizeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtension.swift; sourceTree = "<group>"; };
 		56846C411F73D11700FAD362 /* PngIdatChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngIdatChunkData.swift; sourceTree = "<group>"; };
 		56846C431F74965A00FAD362 /* PngPlteChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngPlteChunkData.swift; sourceTree = "<group>"; };
 		56ADCEDE1F7349780068E370 /* apngSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = apngSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +100,16 @@
 			path = InspectBinary;
 			sourceTree = "<group>";
 		};
+		565931941FD53F6100E80835 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				565931951FD53FA900E80835 /* UIImageExtension.swift */,
+				565931971FD542D100E80835 /* CGRectExtension.swift */,
+				565931991FD543C700E80835 /* CGSizeExtension.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		56ADCED51F7349780068E370 = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +131,7 @@
 		56ADCEE01F7349780068E370 /* apngSample */ = {
 			isa = PBXGroup;
 			children = (
+				565931941FD53F6100E80835 /* Common */,
 				565931931FD53D8700E80835 /* InspectBinary */,
 				56ADCF041F7364550068E370 /* APNG */,
 				56ADCF011F7349840068E370 /* Resource */,
@@ -276,9 +293,11 @@
 			files = (
 				56ADCF0F1F73B6AF0068E370 /* ChunkType.swift in Sources */,
 				56846C421F73D11700FAD362 /* PngIdatChunkData.swift in Sources */,
+				5659319A1FD543C700E80835 /* CGSizeExtension.swift in Sources */,
 				56846C441F74965A00FAD362 /* PngPlteChunkData.swift in Sources */,
 				56ADCF141F73BF710068E370 /* PngFdatChunkData.swift in Sources */,
 				56ADCF181F73BFA20068E370 /* PngIHDRChunkData.swift in Sources */,
+				565931981FD542D100E80835 /* CGRectExtension.swift in Sources */,
 				56ADCEE41F7349780068E370 /* ViewController.swift in Sources */,
 				56ADCF121F73BF4E0068E370 /* PngFctlChunkData.swift in Sources */,
 				56ADCF061F7364640068E370 /* APNG.swift in Sources */,
@@ -289,6 +308,7 @@
 				56ADCF1A1F73C0010068E370 /* ByteArrayConvertible.swift in Sources */,
 				56ADCF0C1F73A9850068E370 /* PngChunk.swift in Sources */,
 				56ADCF161F73BF8B0068E370 /* PngActlChunkData.swift in Sources */,
+				565931961FD53FA900E80835 /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

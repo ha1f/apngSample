@@ -21,3 +21,9 @@ extension PngIdatChunkData: ByteArrayConvertible {
         return data.bytes
     }
 }
+
+extension PngIdatChunkData {
+    func asPngFdatChunkData(sequenceNumber: UInt32) -> PngFdatChunkData {
+        return PngFdatChunkData.init(sequenceNumber: sequenceNumber, frameData: data)
+    }
+}

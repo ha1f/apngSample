@@ -105,6 +105,12 @@ struct ApngImage {
         }
     }
     
+    var idat: PngIdatChunkData? {
+        return chunk(with: .idat).map { chunk in
+            return PngIdatChunkData(chunk.data)
+        }
+    }
+    
     var actl: PngActlChunkData? {
         return chunk(with: .actl).map { chunk in
             return PngActlChunkData(chunk.data)
@@ -144,6 +150,25 @@ struct ApngImage {
             }
         }
         return chunks
+    }
+    
+    static func from(images: [UIImage]) -> ApngImage? {
+        let sequenceNumber: UInt32 = 0
+        guard let firstImage = images.first else {
+            return nil
+        }
+        // TODO: idatをセットしてsequenceをずらす
+        images.map { image in
+            // delayNum/delayDen seconds
+            PngFctlChunkData(sequenceNumber: sequenceNumber, width: firstImage.size.width, height: firstImage.size.height, xOffset: 0, yOffset: 0, delayNum: 1, delayDen: 2, disposeOp: PngFctlChunkData.DisposeOption.background.rawValue, blendOp: PngFctlChunkData.BlendOption.source.rawValue)
+            sequenceNumber += 1
+            from(image: image)?.idat?.asPngFdatChunkData(sequenceNumber: sequenceNumber)
+            sequenceNumber += 1
+        }
+    }
+    
+    static func from(image: UIImage) -> ApngImage? {
+        return UIImagePNGRepresentation(image).map { read(from: $0) }
     }
     
     static func read(from data: Data) -> ApngImage {

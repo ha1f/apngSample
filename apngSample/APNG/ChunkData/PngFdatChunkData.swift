@@ -18,6 +18,11 @@ struct PngFdatChunkData {
         self.sequenceNumber = dataView.readUint32()
         self.frameData = dataView.readToLast()
     }
+    
+    init(sequenceNumber: UInt32, frameData: Data) {
+        self.sequenceNumber = sequenceNumber
+        self.frameData = frameData
+    }
 }
 
 extension PngFdatChunkData: ByteArrayConvertiblesConvertible {

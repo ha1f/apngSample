@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
-//        imageView.contentMode = .center
+        imageView.contentMode = .center
         return imageView
     }()
     var updateTimer: Timer?
@@ -22,10 +22,22 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         view.addSubview(self.imageView)
         
-        read()
+        // readApngAndShow()
+        imageView.frame = view.bounds
+        imageView.animationImages = [
+            UIImage.fromText(text: "1", fontSize: 50, textColor: .yellow),
+            UIImage.fromText(text: "2", fontSize: 50, textColor: .cyan),
+            UIImage.fromText(text: "3", fontSize: 50, textColor: .red),
+            UIImage.fromText(text: "4", fontSize: 50, textColor: .green),
+            UIImage.fromText(text: "5", fontSize: 50, textColor: .blue),
+            UIImage.fromText(text: "6", fontSize: 50, textColor: .orange)
+            ]
+            .flatMap { $0 }
+        imageView.animationDuration = 0.5 * 6
+        imageView.startAnimating()
     }
 
-    func read() {
+    func readApngAndShow() {
         guard let url = Bundle.main
             .path(forResource: "animated", ofType: "png")
             .map({ URL(fileURLWithPath: $0) }) else {

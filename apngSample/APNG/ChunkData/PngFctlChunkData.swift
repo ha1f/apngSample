@@ -23,6 +23,18 @@ struct PngFctlChunkData {
     let disposeOp: UInt8
     let blendOp: UInt8
     
+    init(sequenceNumber: UInt32, width: UInt32, height: UInt32, xOffset: UInt32, yOffset: UInt32, delayNum: UInt16, delayDen: UInt16, disposeOp: UInt8, blendOp: UInt8) {
+        self.sequenceNumber = sequenceNumber
+        self.width = width
+        self.height = height
+        self.xOffset = xOffset
+        self.yOffset = yOffset
+        self.delayNum = delayNum
+        self.delayDen = delayDen
+        self.disposeOp = disposeOp
+        self.blendOp = blendOp
+    }
+    
     init(_ data: Data) {
         let dataView = DataView(data)
         sequenceNumber = dataView.readUint32()
@@ -50,5 +62,11 @@ struct PngFctlChunkData {
         case source = 0
         /// 書き込むデータのアルファ値を使って出力バッファに合成します。このとき、PNG 仕様 への拡張 Version 1.2.0 のアルファチャンネル処理 に書いてある通り上書き処理をします。サンプルコードの 2 つ目の項目を参照してください。
         case over = 1
+    }
+}
+
+extension PngFctlChunkData: ByteArrayConvertiblesConvertible {
+    var convertibles: [ByteArrayConvertible] {
+        return [sequenceNumber, width, height, xOffset, yOffset, delayNum, delayDen, disposeOp, blendOp]
     }
 }
