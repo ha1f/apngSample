@@ -29,8 +29,8 @@ struct ApngImage {
         let ihdr = self.ihdr!.withSettingFrame(width: frame.fctl.width, height: frame.fctl.height)
         let chunks = [
             ihdr.asPngChunk(with: .ihdr),
-            self.plte?.asPngChunk(with: .plte),
-            self.chunk(with: .tRNS),
+            self.plte?.asPngChunk(with: .plte) ?? [],
+            self.chunk(with: .tRNS).map { [$0]} ?? [],
             frame.idat.asPngChunk(with: .idat)
             ].flatMap { $0 }
             + self.chunks.filter { chunk in

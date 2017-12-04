@@ -49,6 +49,13 @@ struct PngChunk {
     }
 }
 
+extension ByteArrayConvertible {
+    // TODO: Check if data size exceeds max size of single chunk, and separate if necessary.
+    func asPngChunk(with type: PngChunkType) -> [PngChunk] {
+        return [PngChunk.create(type: type, data: asData())]
+    }
+}
+
 /*
  IHDR 13
  acTL 8

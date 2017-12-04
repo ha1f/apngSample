@@ -26,10 +26,6 @@ extension ByteArrayConvertible {
     func asData() -> Data {
         return Data(bytes)
     }
-    
-    func asPngChunk(with type: PngChunkType) -> PngChunk {
-        return PngChunk.create(type: type, data: asData())
-    }
 }
 
 extension String.UTF8View {

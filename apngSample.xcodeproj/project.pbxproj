@@ -19,7 +19,7 @@
 		56ADCF061F7364640068E370 /* APNG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF051F7364640068E370 /* APNG.swift */; };
 		56ADCF081F7365CD0068E370 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF071F7365CD0068E370 /* DataView.swift */; };
 		56ADCF0A1F73675D0068E370 /* Crc32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF091F73675D0068E370 /* Crc32.swift */; };
-		56ADCF0C1F73A9850068E370 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF0B1F73A9850068E370 /* Chunk.swift */; };
+		56ADCF0C1F73A9850068E370 /* PngChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF0B1F73A9850068E370 /* PngChunk.swift */; };
 		56ADCF0F1F73B6AF0068E370 /* ChunkType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF0E1F73B6AF0068E370 /* ChunkType.swift */; };
 		56ADCF121F73BF4E0068E370 /* PngFctlChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF111F73BF4E0068E370 /* PngFctlChunkData.swift */; };
 		56ADCF141F73BF710068E370 /* PngFdatChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ADCF131F73BF710068E370 /* PngFdatChunkData.swift */; };
@@ -56,7 +56,7 @@
 		56ADCF051F7364640068E370 /* APNG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APNG.swift; sourceTree = "<group>"; };
 		56ADCF071F7365CD0068E370 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
 		56ADCF091F73675D0068E370 /* Crc32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crc32.swift; sourceTree = "<group>"; };
-		56ADCF0B1F73A9850068E370 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
+		56ADCF0B1F73A9850068E370 /* PngChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngChunk.swift; sourceTree = "<group>"; };
 		56ADCF0E1F73B6AF0068E370 /* ChunkType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkType.swift; sourceTree = "<group>"; };
 		56ADCF111F73BF4E0068E370 /* PngFctlChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngFctlChunkData.swift; sourceTree = "<group>"; };
 		56ADCF131F73BF710068E370 /* PngFdatChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PngFdatChunkData.swift; sourceTree = "<group>"; };
@@ -84,6 +84,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		565931931FD53D8700E80835 /* InspectBinary */ = {
+			isa = PBXGroup;
+			children = (
+				56ADCF071F7365CD0068E370 /* DataView.swift */,
+				56ADCF091F73675D0068E370 /* Crc32.swift */,
+				56ADCF191F73C0010068E370 /* ByteArrayConvertible.swift */,
+			);
+			path = InspectBinary;
+			sourceTree = "<group>";
+		};
 		56ADCED51F7349780068E370 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +115,7 @@
 		56ADCEE01F7349780068E370 /* apngSample */ = {
 			isa = PBXGroup;
 			children = (
+				565931931FD53D8700E80835 /* InspectBinary */,
 				56ADCF041F7364550068E370 /* APNG */,
 				56ADCF011F7349840068E370 /* Resource */,
 				56ADCEE11F7349780068E370 /* AppDelegate.swift */,
@@ -139,11 +150,8 @@
 			children = (
 				56ADCF101F73BF350068E370 /* ChunkData */,
 				56ADCF051F7364640068E370 /* APNG.swift */,
-				56ADCF071F7365CD0068E370 /* DataView.swift */,
-				56ADCF091F73675D0068E370 /* Crc32.swift */,
-				56ADCF0B1F73A9850068E370 /* Chunk.swift */,
+				56ADCF0B1F73A9850068E370 /* PngChunk.swift */,
 				56ADCF0E1F73B6AF0068E370 /* ChunkType.swift */,
-				56ADCF191F73C0010068E370 /* ByteArrayConvertible.swift */,
 			);
 			path = APNG;
 			sourceTree = "<group>";
@@ -279,7 +287,7 @@
 				56ADCEE21F7349780068E370 /* AppDelegate.swift in Sources */,
 				56ADCF0A1F73675D0068E370 /* Crc32.swift in Sources */,
 				56ADCF1A1F73C0010068E370 /* ByteArrayConvertible.swift in Sources */,
-				56ADCF0C1F73A9850068E370 /* Chunk.swift in Sources */,
+				56ADCF0C1F73A9850068E370 /* PngChunk.swift in Sources */,
 				56ADCF161F73BF8B0068E370 /* PngActlChunkData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

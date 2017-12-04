@@ -22,7 +22,9 @@ class DataView {
     }
     
     private func read(_ length: Int) throws -> Data {
-        // TODO: check bounds
+        guard currentIndex.distance(to: data.endIndex) >= length else {
+            fatalError("tried to read out of bounds of the data")
+        }
         let seekedIndex = currentIndex.advanced(by: length)
         let subdata = data.subdata(in: currentIndex..<seekedIndex)
         currentIndex = seekedIndex
