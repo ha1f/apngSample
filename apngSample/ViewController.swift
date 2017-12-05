@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Social
 
 class ViewController: UIViewController {
     
@@ -40,6 +41,19 @@ class ViewController: UIViewController {
         readApngAndShow(data)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let imageSize = CGSize(width: 100, height: 100)
+        [
+            UIImage.fromText(text: "3", fontSize: 100, textColor: .red)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "4", fontSize: 100, textColor: .green)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "5", fontSize: 100, textColor: .blue)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "6", fontSize: 100, textColor: .orange)?.resized(to: imageSize, contentMode: .center)
+            ].flatMap { $0 }.forEach { image in
+                saveImage(UIImage(data: UIImagePNGRepresentation(image)!)!)
+        }
+    }
+    
     func readApngDataFromFile() -> Data? {
         guard let url = Bundle.main
             .path(forResource: "animated", ofType: "png")
@@ -50,7 +64,12 @@ class ViewController: UIViewController {
         return try? Data(contentsOf: url)
     }
     
-    
+    private func saveImage(_ image: UIImage) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil)
+        self.present(activityViewController, animated: true, completion: nil)
+    }
 
     func readApngAndShow(_ data: Data) {
         let pngImage = ApngImage.read(from: data)
