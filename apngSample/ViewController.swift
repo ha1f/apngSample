@@ -22,47 +22,60 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         view.addSubview(self.imageView)
         
-        // readApngAndShow()
-        imageView.frame = view.bounds
-        imageView.animationImages = [
-            UIImage.fromText(text: "1", fontSize: 50, textColor: .yellow),
-            UIImage.fromText(text: "2", fontSize: 50, textColor: .cyan),
-            UIImage.fromText(text: "3", fontSize: 50, textColor: .red),
-            UIImage.fromText(text: "4", fontSize: 50, textColor: .green),
-            UIImage.fromText(text: "5", fontSize: 50, textColor: .blue),
-            UIImage.fromText(text: "6", fontSize: 50, textColor: .orange)
-            ]
-            .flatMap { $0 }
-        imageView.animationDuration = 0.5 * 6
-        imageView.startAnimating()
+        let imageSize = CGSize(width: 100, height: 100)
+        
+        let images = [
+            UIImage.fromText(text: "1", fontSize: 100, textColor: .yellow)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "2", fontSize: 100, textColor: .cyan)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "3", fontSize: 100, textColor: .red)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "4", fontSize: 100, textColor: .green)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "5", fontSize: 100, textColor: .blue)?.resized(to: imageSize, contentMode: .center),
+            UIImage.fromText(text: "6", fontSize: 100, textColor: .orange)?.resized(to: imageSize, contentMode: .center)
+        ].flatMap { $0 }
+        
+        let data = ApngImage.from(images: images)!.asData()
+        
+//         let data = readApngDataFromFile()!
+        
+        readApngAndShow(data)
     }
-
-    func readApngAndShow() {
+    
+    func readApngDataFromFile() -> Data? {
         guard let url = Bundle.main
             .path(forResource: "animated", ofType: "png")
             .map({ URL(fileURLWithPath: $0) }) else {
-            print("Could not find image")
-            return
+                print("Could not find image")
+                return nil
         }
-        do {
-            let data = try Data(contentsOf: url)
-            let pngImage = ApngImage.read(from: data)
-            imageView.frame = CGRect(origin: .zero, size: CGSize(width: CGFloat(pngImage.ihdr!.width), height: CGFloat(pngImage.ihdr!.height)))
-            
-            let maxCount = pngImage.frames.count
+        return try? Data(contentsOf: url)
+    }
+    
+    
+
+    func readApngAndShow(_ data: Data) {
+        let pngImage = ApngImage.read(from: data)
+        pngImage.debugPrint()
+        
+        imageView.frame = CGRect(origin: .zero, size: CGSize(width: CGFloat(pngImage.ihdr!.width), height: CGFloat(pngImage.ihdr!.height)))
+        imageView.center = view.center
+        
+        let pngFrames = pngImage.getFrames()
+        
+        if pngImage.isApng {
+            let maxCount = pngFrames.count
             var currentFrameIndex = 0
             self.updateTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
                 if currentFrameIndex >= maxCount {
                     currentFrameIndex = 0
                 }
-                let image = pngImage.buildUIImage(from: pngImage.frames[currentFrameIndex])
+                print(currentFrameIndex, pngFrames[currentFrameIndex])
+                let image = pngImage.buildUIImage(from: pngFrames[currentFrameIndex])
                 self.imageView.image = image
                 currentFrameIndex += 1
             }
-        } catch(let error) {
-            print(error)
+        } else {
+            imageView.image = pngImage.asUIImage()
         }
-        
     }
 
 

@@ -36,7 +36,7 @@ struct PngChunk {
     }
     
     func asData() -> Data {
-        let bytes = length.bytes + type.utf8.bytes + data.bytes + crc.bytes
+        let bytes = length.bytes + type.data(using: .ascii)!.bytes + data.bytes + crc.bytes
         return Data(bytes: bytes)
     }
     

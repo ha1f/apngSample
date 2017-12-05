@@ -33,12 +33,23 @@ extension UIImage {
     }
     
     /// 画像をリサイズ
-    func getResizedImage(size: CGSize) -> UIImage? {
+    func resized(to size: CGSize, contentMode: UIViewContentMode = .scaleToFill) -> UIImage? {
         UIGraphicsBeginImageContext(size)
         defer {
             UIGraphicsEndImageContext()
         }
-        self.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let canvasRect = CGRect(origin: CGPoint.zero, size: size)
+        
+        let targetRect: CGRect
+        switch contentMode {
+        case .scaleToFill:
+            targetRect = canvasRect
+        case .center:
+            targetRect = self.size.rectOfCenter(in: canvasRect)
+        default:
+            targetRect = canvasRect
+        }
+        self.draw(in: targetRect)
         return UIGraphicsGetImageFromCurrentImageContext()
     }
     
@@ -49,7 +60,7 @@ extension UIImage {
             return self.safeCgImage.map { UIImage(cgImage: $0) }
         }
         let newSize = CGSize(width: self.size.width * scale, height: self.size.height * scale)
-        return getResizedImage(size: newSize)
+        return resized(to: newSize)
     }
     
     func getOrientaionNormalizedImage() -> UIImage? {
@@ -207,20 +218,9 @@ extension UIImage {
         ]
         let imageSize = (text as NSString).size(withAttributes: attributes)
         
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
-        defer {
-            UIGraphicsEndImageContext()
+        return UIGraphicsImageRenderer(size: imageSize).image { context in
+            let textRect = CGRect(origin: .zero, size: imageSize)
+            (text as NSString).draw(in: textRect, withAttributes: attributes)
         }
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        
-        context.setTextDrawingMode(CGTextDrawingMode.fill)
-        
-        let textRect = CGRect(origin: .zero, size: imageSize)
-        (text as NSString).draw(in: textRect, withAttributes: attributes)
-        
-        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }

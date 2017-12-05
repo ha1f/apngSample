@@ -17,5 +17,11 @@ extension CGSize {
         return CGSize(width: width + inset.left + inset.right,
                       height: height + inset.top + inset.bottom)
     }
+    
+    static func covering(_ sizes: [CGSize]) -> CGSize {
+        return sizes.reduce(CGSize.zero, { currentMax, size in
+            return CGSize(width: max(currentMax.width, size.width), height: max(currentMax.height, size.height))
+        })
+    }
 
 }

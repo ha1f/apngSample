@@ -51,9 +51,12 @@ enum PngChunkType: String {
     case sCAL = "sCAL"
     
     // apng specific
-    case actl = "acTL"
+    case acTL = "acTL"
     case fcTL = "fcTL"
     case fdAT = "fdAT"
+    
+    // apple specific
+    case iDOT = "iDOT"
     
     var isDefaultType: Bool {
         return PngChunkType.defaultTypes.contains { $0.rawValue == self.rawValue }

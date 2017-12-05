@@ -16,6 +16,11 @@ struct PngActlChunkData {
     /// ループ回数、0なら無限
     let numPlays: UInt32
     
+    init(numFrames: UInt32, numPlays: UInt32 = 0) {
+        self.numFrames = numFrames
+        self.numPlays = numPlays
+    }
+    
     init(_ data: Data) {
         let dataView = DataView(data)
         numFrames = dataView.readUint32()
